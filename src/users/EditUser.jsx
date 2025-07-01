@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const EditUser = () => {
   const { id } = useParams();
 
@@ -20,8 +22,12 @@ const EditUser = () => {
 
   useEffect(() => {
     const updateUser = async () => {
-      const response = await axios.get(`http://localhost:8080/user/${id}`);
-      setAddUser(response.data);
+      try {
+        const response = await axios.get(`${API_BASE}/user/${id}`);
+        setAddUser(response.data);
+      } catch (err) {
+        console.log("Failed to fetch user:", err);
+      }
     };
     updateUser();
   }, [id]);
@@ -29,7 +35,7 @@ const EditUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:8080/user/${id}`, addUser);
+      await axios.put(`${API_BASE}/user/${id}`, addUser);
       alert("User updated successfully");
       setAddUser({
         name: "",
@@ -38,7 +44,7 @@ const EditUser = () => {
       });
       navigate("/");
     } catch (err) {
-      console.log(err);
+      console.log("Failed to update user:", err);
       alert("Failed to update user");
     }
   };

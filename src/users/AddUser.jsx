@@ -16,10 +16,12 @@ const AddUser = () => {
     setAddUser({ ...addUser, [name]: value });
   };
 
+  const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8080/user", addUser);
+      await axios.post(`${API_BASE}/user`, addUser);
       alert("User added successfully");
       setAddUser({
         name: "",

@@ -2,14 +2,20 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const ViewUser = () => {
   const [viewUser, setViewUser] = useState();
   const { id } = useParams();
 
   useEffect(() => {
     const userById = async () => {
-      let response = await axios.get(`http://localhost:8080/user/${id}`);
-      setViewUser(response.data);
+      try {
+        const response = await axios.get(`${API_BASE}/user/${id}`);
+        setViewUser(response.data);
+      } catch (err) {
+        console.log("Error fetching user:", err);
+      }
     };
     userById();
   }, [id]);

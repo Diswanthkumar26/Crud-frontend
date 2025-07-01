@@ -2,25 +2,31 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const Home = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/user");
+        const response = await axios.get(`${API_BASE}/user`);
         setUsers(response.data);
       } catch (err) {
-        console.log(err);
+        console.log("Failed to fetch users:", err);
       }
     };
     fetchUsers();
   }, []);
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:8080/user/${id}`);
-    const response = await axios.get("http://localhost:8080/user");
-    setUsers(response.data);
+    try {
+      await axios.delete(`${API_BASE}/user/${id}`);
+      const response = await axios.get(`${API_BASE}/user`);
+      setUsers(response.data);
+    } catch (err) {
+      console.log("Failed to delete user:", err);
+    }
   };
 
   return (
@@ -28,7 +34,7 @@ const Home = () => {
       <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center text-gray-700">User List</h2>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {users.map((user, index) => (
+        {Array.isArray(users) && users.map((user, index) => (
           <div
             key={user.id}
             className="bg-white rounded-2xl shadow-md p-5 border border-gray-200 hover:shadow-lg transition duration-300"
