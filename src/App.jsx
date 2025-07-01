@@ -2,7 +2,7 @@ import './App.css'
 import Navbar from './layout/Navbar'
 import Home from './pages/Home'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import AddUSer from './users/AddUser';
+import AddUser from './users/AddUser';
 import ViewUser from './users/ViewUser';
 import EditUser from './users/EditUser';
 
